@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>  
+<head>  
+	<meta charset="utf-8">  
+	<title>交易返回值</title>  
+
+<style>
+	.axis path,
+	.axis line{
+		fill: none;
+		stroke: black;
+		shape-rendering: crispEdges;
+	}
+	
+	.major>path,
+	.major>line{
+		stroke: #ccc;
+	}
+
+	.axis text {
+		font-family: sans-serif;
+		font-size: 11px;
+	}
+	.MyText {
+		fill: white;
+		text-anchor: middle;
+	}
+	.textdata{
+		fill: black;
+	}
+	.tooltip{
+      	 font-family : simsun;
+      	 font-size : 14px;
+      	 width : 120;
+      	 height : auto;
+      	 position : absolute;
+      	 text-align : center;
+         border-style : solid; 
+      	 border-width : 1px;
+      	 background-color : darkgray;
+      	 border-radius : 5px;
+      	 color: white;
+  }
+</style>
+
+</head> 
+
+<body>  
+	<script src="js/d3.v3.js" charset="utf-8"></script>
+	<script>
+	var app_name = "app1";
+	var cap_name = "intf3";
+	var earliest = "1459446960.0";
+	var latest = "1459447860.0";
+	var csrf_token ="whOXjXHNQpOsiuIi4O9e8lUcfq2kFpIL";
+	var ser_data = {
+	        "csrfmiddlewaretoken": csrf_token,
+	        "endponit": "/zh-cn/stat/task/"+ app_name +"/cap/"+ cap_name +"/",
+	        "app_name": app_name,
+	        "metric": "1",
+	        "search_mode": "normal",
+	        "scope":"capture",
+	        "cap_name": cap_name,
+	        "earliest": earliest,
+	        "latest": latest,
+	        "dim_trans_type": "*",
+	        "dim_sub_trans_type": "*"
+	    };
+	
+	function DrawCharts() {
+	  var time = [];
+	  var count = [];
+      ser_data.search = 'ret_code';
+      d3.json(ser_data.endponit)
+	  .header("Content-Type", "application/x-www-form-urlencoded")
+      	.post("csrfmiddlewaretoken="+ ser_data.csrfmiddlewaretoken +
+	   		"&endponit=" + ser_data.endponit +
+	   		"&app_name=" + ser_data.app_name +
+	  		"&metric=" + ser_data.metric +
+	  		"&search_mode=" + ser_data.search_mode +
+	  		"&scope=" + ser_data.scope +
+	  		"&cap_name=" + ser_data.cap_name +
+	  		"&earliest=" + ser_data.earliest +
+	  		"&latest=" + ser_data.latest +
+	  		"&dim_trans_type=" + ser_data.dim_trans_type +
+	  		"&dim_sub_trans_type=" + ser_data.dim_sub_trans_type +
+	  		"&search=" + ser_data.search, function(e, datas) {
+          if(datas['ok']){
+			  function fordata(){
+					d3.json(ser_data.endponit + '/' + datas.job_id + '/')
+						.header("Content-Type", "application/x-www-form-urlencoded")
+						.post(ser_data.csrf_token, function(e, result) {
+							var chart_data = [];
+							if (result.status.isDone) {
+								clearInterval(state);
+								var stat_data = result.results;
+								for (var i = 0; i < stat_data.length; i++) {
+									if (stat_data[i].trans_count) {
+										count.push(stat_data[i].trans_count);
+									} else {
+										count.push(0);
+									}
+									if (stat_data[i].ret_code) {
+										time.push(stat_data[i].ret_code);
+									} else {
+										time.push(0);
+									}
+								}
+								createSVG(time, count);
+							}
+						})
+				}
+              fordata();
+              var state = setInterval(function (){fordata()}, 500);
+
+          }
+      });
+      
+	};
+
+function createSVG(time, count){
+	//网页可见区域宽高
+	var bodyX = document.body.clientWidth;
+    var bodyY = document.body.clientHeight;
+    //var padding = bodyX/20;//X边界值
+    //var paddingY = bodyY/15; //Y边界值
+	var axisW = bodyX - padding - 100;//坐标轴宽度
+	var width = bodyX - padding;//SVG宽度
+	var height = bodyY - padding;//SVG高度
+	//画布大小
+//	var width = 800;
+//	var height = 400;
+	var width = bodyX - 100;
+	if(width < 300){
+		width = 300;
+	}
+	var height = bodyY - 100;
+	if(height < 300){
+		height = 300;
+	}
+	var pad = 20;//标题y轴位置
+	/*var color = d3.scale.category20();*/
+	var color = ["#ccc", "#c49c94"];
+
+	//在 body 里添加一个 SVG 画布	
+	var svg = d3.select("body")
+		.append("svg")
+		.attr("id","ret_code_dis")
+		.attr("width", width)
+		.attr("height", height)
+		.style("min-width","1020px");
+		
+	//画布周边的空白
+	var padding = {left:40, right:30, top:60, bottom:20};
+
+	var str = time; /*[ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" ];*/
+	var dataset = count; /*[4, 6.8, 5, 5, 6.5, 7.2, 3.8, 5.8, 8, 3.9, 2.6, 19.99];*/
+	var title = "交易返回值";
+	
+	//添加标题
+	if (title != "") {
+		svg.append("g")
+			.append("text")
+			.text(title)
+			.attr("x", width / 40)
+			.attr("y", pad);
+	}
+	
+	//x轴的比例尺
+	var xScale = d3.scale.ordinal()
+	    .domain(str)
+		.rangeRoundBands([0, width - padding.left - padding.right]);
+
+	//y轴的比例尺
+	var yScale = d3.scale.linear()
+		.domain([1,d3.max(dataset)])
+		.range([height - padding.top - padding.bottom, 0]);
+	//定义纵轴网格线
+	var yInner = d3.svg.axis()
+		.scale(yScale)
+		.tickSize(-(width - pad * 2), 0, 0)
+		.tickFormat("")
+		.orient("left")
+		.ticks(8);
+	//添加纵轴网格线
+	var yBar = svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate(" + pad * 2 + ",60)")
+		.call(yInner);
+
+	//定义x轴
+	var xAxis = d3.svg.axis()
+		.scale(xScale)
+		.orient("bottom");
+		
+	//定义y轴
+	var yAxis = d3.svg.axis()
+		.scale(yScale)
+		.orient("left");
+
+	//矩形之间的空白
+	var rectPadding = 4;
+	
+	//添加提示元素
+	var tooltip = d3.select("body")
+	    .append("div")
+	    .attr("class","tooltip")
+	    .style("opacity","0.0");
+		
+	
+	//添加矩形元素
+	var rects = svg.selectAll(".MyRect")
+		.data(dataset)
+		.enter()
+		.append("rect")
+		.on("mouseover",function(d,i){
+				tooltip.html(
+				    + str[i]
+				    + "<br/>"
+					+ "交易量: "
+					+ d +"(笔)"
+				)
+		               .style("left", d3.event.pageX + "px")
+		               .style("top", (d3.event.pageY + 20) + "px")
+		               .style("opacity",0.8);
+		})
+		.on("mousemove",function(){
+		    tooltip.style("left", d3.event.pageX + "px")
+                   .style("top", (d3.event.pageY + 20) + "px")
+		})
+		.on("mouseout",function(){
+			tooltip.style("opacity",0.0);
+		})
+		.attr("fill",function(d,i){
+	    	return color[i%2];
+	    })
+		.attr("transform","translate(" + padding.left + "," + padding.top + ")")
+		.attr("x", function(d,i){
+			return xScale(str[i]) + rectPadding/2;
+		} )
+		.attr("width", xScale.rangeBand() - rectPadding )
+		.attr("y",function(d){
+			var min = yScale.domain()[0];
+			return yScale(min);
+		})
+		.attr("height", function(d){
+			return 0;
+		})
+		.transition()
+		.delay(function(d,i){
+			return i * 200;
+		})
+		.duration(2000)
+		.ease("bounce")
+		.attr("y",function(d){
+			return yScale(d);
+		})
+		.attr("height", function(d){
+			if((height - padding.top - padding.bottom - yScale(d)) > 0){
+				return height - padding.top - padding.bottom - yScale(d);
+			}else{
+				return 0.1;
+			}
+			
+		});
+		
+    //添加文字元素
+	var texts = svg.selectAll(".MyText")
+		.data(dataset)
+		.enter()
+		.append("text")
+		.attr("class","textdata")
+		.attr("transform","translate(" + padding.left / 1.4 + "," + padding.top / 2 + ")")
+		.attr("x", function(d,i){
+			return xScale(str[i]) + rectPadding/2;
+		} )
+		.attr("dx",function(){
+			return (xScale.rangeBand() - rectPadding)/2;
+		})
+		.attr("dy",function(d){
+			return 20;
+		})
+		.text(function(d){
+			return d;
+		})
+		.attr("y",function(d){
+			var min = yScale.domain()[0];
+			return yScale(min);
+		})
+		.transition()
+		.delay(function(d,i){
+			return i * 200;
+		})
+		.duration(2000)
+		.ease("bounce")
+		.attr("y",function(d){
+			return yScale(d);
+		});
+		
+	//添加x轴
+	svg.append("g")
+		.attr("class","axis")
+		.attr("transform","translate(" + padding.left + "," + (height - padding.bottom) + ")")
+		.call(xAxis); 
+		
+	//添加y轴
+	svg.append("g")
+		.attr("class","axis")
+		.attr("transform","translate(" + padding.left + "," + padding.top + ")")
+		.call(yAxis);
+	//自适应
+	window.onresize = function(d){
+	     svg.remove();
+	     tooltip.remove();
+	     createSVG(time, count);
+	 }
+		
+}
+
+window.onload = function () {
+  DrawCharts();
+};
+</script>  
+</body>  
+</html>  

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>首页右边健康度和交易量信息展示</title>
+<script type="text/javascript" src="js/d3.v3.js" ></script>
+<script type="text/javascript" src="js/indexTinyBox.js" ></script>
+<script type="text/javascript" src="js/health.js" ></script>
+<script type="text/javascript" src="js/clock.js" ></script>
+<script type="text/javascript" src="js/tradingVolume.js" ></script>
+<style>
+	body{
+		background: #000000;
+		color: white;
+	}
+	a{
+		text-decoration: none;
+		color: white;
+		display: block;
+	}
+	.home_dashboard,.trans_count_div {
+	    min-width: 170px !important;
+	}
+	.home_dashboard {
+	    position: fixed;
+	    right: 3%;
+	    width: 10%;
+	    top: 110px;
+	    /*background: #31548c;*/
+	}
+	.health_div{
+		font-size: 14px;
+	    width: 77%;
+	    margin: 0 auto;
+	    text-align: left;
+	}
+	.indexHealth {
+	    position: relative;
+	    padding: 10px;
+	    border-radius: 5px;
+	    min-width: 170px;
+	    color: #B0ECFD;
+	}
+	.health_a_div {
+	    text-align: center;
+	}
+	.hp-health {
+	    font-size: 16px;
+	    font-weight: bold;
+	}
+	.hp-number {
+	    font-size: 30px;
+	    margin-left: 20px;
+	}
+	.trans_count_div{
+		top: 10px;
+	}
+	.bg{
+		background: #31548c;
+	}
+	.table{
+		width: 100%;
+	}
+	.table tr td{
+		width: 21%;
+		overflow: hidden;
+		letter-spacing: normal;
+	}
+	.table > tr > td:nth-child(even) {
+		text-align: right;
+	}
+	.table > tr > td > span:nth-child(even) {
+		font-size: 10px;
+		margin-left: 5px;
+	}
+</style>
+
+</head>
+<body>
+</body>
+</html>

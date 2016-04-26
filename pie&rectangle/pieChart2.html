@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>交易类型</title>
+		<style>
+			.tooltip{
+		      	 font-family : simsun;
+		      	 font-size : 14px;
+		      	 width : 120;
+		      	 height : auto;
+		      	 position : absolute;
+		      	 text-align : center;
+		         border-style : solid; 
+		      	 border-width : 1px;
+		      	 background-color : darkgray;
+		      	 border-radius : 5px;
+		      	 color: white;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript" charset="utf-8" src="js/d3.v3.js"></script>
+		<script>
+		var app_name = "app1";
+		var cap_name = "intf3";
+		var earliest = "1459446960.0";
+		var latest = "1459447860.0";
+		var csrf_token ="whOXjXHNQpOsiuIi4O9e8lUcfq2kFpIL";
+		var ser_data = {
+	        "csrfmiddlewaretoken": csrf_token,
+	        "endponit": "/zh-cn/stat/task/" + app_name + "/cap/" + cap_name + "/",
+	        "app_name": app_name,
+	        "metric": "1",
+	        "search_mode": "normal",
+	        "scope":"capture",
+	        "cap_name": cap_name ,
+	        "earliest": earliest,
+	        "latest": latest,
+	        "dim_trans_type": "*",
+	        "dim_sub_trans_type": "*"
+	  };
+	  
+function pieChart(){
+	  var time = [];
+	  var count = [];
+      ser_data.search = 'dim_duration_rank';
+      d3.json(ser_data.endponit)
+	  .header("Content-Type", "application/x-www-form-urlencoded")
+	  .post("csrfmiddlewaretoken="+ ser_data.csrfmiddlewaretoken +
+	   		"&endponit=" + ser_data.endponit +
+	   		"&app_name=" + ser_data.app_name +
+	  		"&metric=" + ser_data.metric +
+	  		"&search_mode=" + ser_data.search_mode +
+	  		"&scope=" + ser_data.scope +
+	  		"&cap_name=" + ser_data.cap_name +
+	  		"&earliest=" + ser_data.earliest +
+	  		"&latest=" + ser_data.latest +
+	  		"&dim_trans_type=" + ser_data.dim_trans_type +
+	  		"&dim_sub_trans_type=" + ser_data.dim_sub_trans_type +
+	  		"&search=" + ser_data.search,function(e,datas){
+          if(datas['ok']){
+			  function fordata(){
+					d3.json(ser_data.endponit + '/' + datas.job_id + '/')
+						.header("Content-Type", "application/x-www-form-urlencoded")
+						.post(ser_data.csrf_token, function(e, result) {
+							var chart_data = [];
+							if (result.status.isDone != null && result.status.isDone) {
+								clearInterval(state);
+								var stat_data = result.results;
+								for (var i = 0; i < stat_data.length; i++) {
+									/*debugger;*/
+									if (stat_data[i].duration) {
+										count.push(stat_data[i].duration);
+									} else {
+										count.push(0);
+									}
+									if (stat_data[i].rank_name) {
+										time.push(stat_data[i].rank_name);
+									} else {
+										time.push(0);
+									}
+								}
+								pieSVG(time, count);
+							}
+						})
+				}
+              fordata();
+              var state = setInterval(fordata, 500);
+
+          }
+      });
+}
+var svg;
+var tooltip;
+function pieSVG(time, count){
+	    var dataSet = count;/*[10, 30, 10, 30, 10, 30, 10, 30];*/
+		var tips = time; /*['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月'];*/
+		//网页可见区域宽高
+		var bodyX = document.body.clientWidth;
+	    var bodyY = document.body.clientHeight;
+		var pieChart = {
+			buildPieStructure: function(){
+			this.width = bodyX - 100;
+			this.height = bodyY - 100;
+			if(this.height < 300){
+				this.height = 300;
+			}
+			this.radius = Math.min(this.width, this.height) / 2;
+			this.color = d3.scale.category20(); /*构造一个有10种颜色的序数比例尺*/
+			//转化数据为适合生成饼图的对象数组
+			this.pie = d3.layout.pie()
+			    .sort(null);
+			/*//获取或设置外半径访问器 
+			var outerRadius = width / 2;  
+			//获取或设置内半径访问器
+			var innerRadius = width / 4;*/
+			this.arc = d3.svg.arc()
+			     .innerRadius(this.radius - 100)
+			     .outerRadius(this.radius - 50);
+			this.svg = d3.select("div")
+			    .append("svg")
+			    .attr("width", this.width)
+			    .attr("height", this.height)
+			    .append("g")
+			    .attr("transform","translate("+this.width/2+","+this.height/2+")");
+			//添加提示元素
+			this.tooltip = d3.select("div")
+			    .append("div")
+			    .attr("class","tooltip")
+			    .style("opacity","0.0");
+			},
+			oldPieData:"",
+			pieTween: function(d,i){
+				var that = this;
+				var theOldDtataInPie = pieChart.oldPieData;
+				var s0;
+				var e0;
+				if (theOldDtataInPie[i]) {
+					s0 = theOldDtataInPie[i].startAngle;
+					e0 = theOldDtataInPie[i].endAngle;
+				} else if(!(theOldDtataInPie[i]) && theOldDtataInPie[i-1]){
+					s0 = theOldDtataInPie[i-1].endAngle;
+					e0 = theOldDtataInPie[i-1].endAngle;
+				} else if(!(theOldDtataInPie[i-1]) && theOldDtataInPie.length > 0){
+					s0 = theOldDtataInPie[theOldDtatInPie.length-1].endAngle;
+					e0 = theOldDtataInPie[theOldDtatInPie.length-1].endAngle;
+				} else {
+					s0 = 0;
+					e0 = 0;
+				}
+				var i =d3.interpolate({startAngle: s0, endAngle: e0}, {startAngle: d.startAngle, endAngle: d.endAngle});
+				return function(t){
+					var b = i(t);
+					return pieChart.arc(b);
+				};
+			},
+			removePieTween: function(d,i){
+				var that = this;
+				s0 = 2 * Math.PI;
+				e0 = 2 * Math.PI;
+				var i = d3.interpolate({startAngle: d.startAngle, endAngle: d.endAngle}, {startAngle: s0, endAngle: e0});
+				return function(t){
+					var b = i(t);
+					return pieChart.arc(b);
+				};
+			},
+			update: function(dataSet){
+				console.log("update pie",dataSet);
+				var that = this;
+				this.piedata = this.pie(dataSet);
+				this.path = this.svg.selectAll("path.pie")
+				    .data(this.piedata);
+				this.path.enter()
+				    .append("path")
+				    .attr("class","pie")
+				    .on("mouseover",function(d,i){
+							that.tooltip.html(
+								tips[i] 
+								+ "<br/>"
+								+ "响应时间: "
+							    + Math.round((d.data)*100)/100 +"ms"
+							)
+			               .style("left", d3.event.pageX + "px")
+			               .style("top", (d3.event.pageY + 20) + "px")
+			               .style("opacity",0.8);
+					})
+					.on("mousemove",function(){
+					    that.tooltip.style("left", d3.event.pageX + "px")
+			                        .style("top", (d3.event.pageY + 20) + "px")
+					})
+					.on("mouseout",function(){
+						that.tooltip.style("opacity",0.0);
+						that.tooltip.html("");
+					})
+				    .attr("fill",function(d,i){
+				    	return that.color(i);
+				    })
+				    .transition()
+				    .duration(300)
+				    .attrTween("d",that.pieTween);
+				this.path.transition()
+				    .duration(300)
+				    .attrTween("d",that.pieTween);
+			    this.path.exit()
+			        .transition()
+				    .duration(300)
+				    .attrTween("d",that.pieTween)
+				    .remove();
+				var labels = this.svg.selectAll("text")
+				    .data(this.piedata);
+				labels.enter()
+				    .append("text")
+				    .attr("text-anchor","middle");
+				labels.attr("x",function(d){
+					var a = d.startAngle + (d.endAngle - d.startAngle) / 2 - Math.PI / 2;
+					d.cx = Math.cos(a) * (that.radius - 75);
+					return d.x = Math.cos(a) * (that.radius - 20);
+				})
+				.attr("y",function(d){
+					var a = d.startAngle + (d.endAngle - d.startAngle) / 2 - Math.PI / 2;
+					d.cy = Math.sin(a) * (that.radius - 75);
+					return d.y = Math.sin(a) * (that.radius - 20);
+				})
+				.text(function(d,i){
+					return tips[i];
+				})
+				.each(function(d){
+					var bbox = this.getBBox();
+	                d.sx = d.x - bbox.width/2 - 2;
+	                d.ox = d.x + bbox.width/2 + 2;
+	                d.sy = d.oy = d.y + 5;
+				});
+		        
+		        var pointers = this.svg.selectAll("path.pointer")
+		            .data(this.piedata);
+		        pointers.enter()
+		            .append("path")
+		            .attr("class", "pointer")
+		            .style("fill", "none")
+		            .style("stroke",function(d,i){
+				    	return that.color(i);
+				    })
+		            .style("shape-rendering","crispEdges");
+		            /*.attr("marker-end", "url(#circ)");*/
+				pointers.transition().attr("d", function(d) {
+					if(d.cx > d.ox) {
+					    return "M" + d.sx + "," + d.sy + "L" + d.ox + "," + d.oy + " " + d.cx + "," + d.cy;
+					} else {
+					    return "M" + d.ox + "," + d.oy + "L" + d.sx + "," + d.sy + " " + d.cx + "," + d.cy;
+					}
+				});
+				this.oldPieData = this.piedata;
+				window.onresize = function(d){
+					d3.select("#pieChart").html("");
+				   pieSVG(time, count);
+				}
+			}
+		}
+		pieChart.buildPieStructure();    
+		pieChart.update(dataSet);
+		
+}
+
+
+
+window.onload = function () {
+	d3.select("body").append("div").attr("id","pieChart");
+  pieChart();
+};
+		</script>
+	</body>
+</html>

@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+	
+<head>
+		
+<meta charset="utf-8">  
+	<title></title>  
+
+<style>
+select {
+    border: solid 1px #000;
+  
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+
+    padding-right: 14px;
+
+    background: url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll right center transparent;
+    
+	
+}
+
+body{
+
+background-color:black;
+
+}
+
+
+
+
+select::-ms-expand { display: none; }
+
+/*form{
+	position:absolute;
+	left:95px;
+	top:75px;
+}*/
+.index-form select{
+	background-color: #303030;
+	padding: 5 5;
+	height: 22px;
+	font: 14px/20px "Microsoft YaHei"; 
+	//font-size: 60;
+	color: #C3C8D1;
+	
+}
+.index-form option{
+	background-color: #303030;
+	color: #C3C8D1;
+	height: 50px;
+	//font: 14px/20px "Microsoft YaHei"; 
+	line-height: 30px;
+	width:80px;
+	border-bottom: 1px #5A6B8A solid;
+
+
+</style>
+<title> 
+</title>
+
+</head>
+
+	
+<body >
+		
+			
+
+		
+
+		
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>  
+<script>
+var myDate = new Date();
+var Year = myDate.getFullYear();
+var Month = myDate.getMonth();
+var Day = myDate.getDate();
+var Hour = myDate.getHours();
+var Min = myDate.getMinutes();
+
+
+
+d3.select("body").append("form")//年月日时间框
+				 .attr("name","reg_testdate")
+				 .attr("class","index-form");
+
+d3.select("form").append("select")
+                 .attr("id","year")
+				 .attr("name","YYYY")
+				 .attr("onChange","YYYYDD(this.value)")
+                 .append("option")
+				 .attr("value","")
+				 .html("请选 年");
+
+d3.select("form").append("select")
+                 .attr("id","month")
+				 .attr("name","MM")
+				 .attr("onChange","MMDD(this.value)")
+                 .append("option")
+				 .attr("value","")
+				 .html("请选 月");
+				 
+d3.select("form").append("select")
+                 .attr("id","day")
+				 .attr("name","DD")
+                 .append("option")
+				 .attr("value","")
+				 .html("请选 日");
+
+function YYYYMMDDstart(){   
+				
+MonHead = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];   
+				
+				
+//先给年下拉框赋内容   
+				
+var y  = new Date().getFullYear();  
+				
+for (var i = (y-30); i < (y+30); i++) //以今年为准，前30年，后30年   
+	document.reg_testdate.YYYY.options.add(new Option(" "+ i +" 年", i));   
+				
+				
+//赋月份的下拉框   
+				
+for (var i = 1; i < 13; i++)   
+	document.reg_testdate.MM.options.add(new Option(" " + i + " 月", i));   
+
+document.reg_testdate.YYYY.value = y;   
+document.reg_testdate.MM.value = new Date().getMonth() + 1;   			
+
+var n = MonHead[new Date().getMonth()];   
+				
+if (new Date().getMonth() ==1 && IsPinYear(YYYYvalue)) 
+	n++;   
+writeDay(n); //赋日期下拉框Author:meizz   
+	
+document.reg_testdate.DD.value = new Date().getDate();   
+			}   
+			
+if(document.attachEvent)   
+	window.attachEvent("onload", YYYYMMDDstart);   
+else   
+	window.addEventListener('load', YYYYMMDDstart, false);   
+			
+function YYYYDD(str){ //年发生变化时日期发生变化(主要是判断闰平年)   
+	var MMvalue = document.reg_testdate.MM.options[document.reg_testdate.MM.selectedIndex].value;   
+		if (MMvalue == ""){ var e = document.reg_testdate.DD; optionsClear(e); return;}   
+				
+		var n = MonHead[MMvalue - 1];   
+				
+		if (MMvalue ==2 && IsPinYear(str)) n++;   
+				
+		writeDay(n)   
+			
+}   
+			
+function MMDD(str)   //月发生变化时日期联动   
+			
+{   
+				
+var YYYYvalue = document.reg_testdate.YYYY.options[document.reg_testdate.YYYY.selectedIndex].value;   
+				
+if (YYYYvalue == ""){ var e = document.reg_testdate.DD; optionsClear(e); return;}   
+				
+var n = MonHead[str - 1];   
+				
+if (str ==2 && IsPinYear(YYYYvalue)) n++;   
+				
+writeDay(n)   
+			
+}   
+			
+function writeDay(n){    //据条件写日期的下拉框  
+	var e = document.reg_testdate.DD; optionsClear(e);   
+	for (var i=1; i<(n+1); i++)   
+		e.options.add(new Option(" "+ i + " 日", i));   			
+}   
+			
+function IsPinYear(year){		//判断是否闰平年	
+	return(0 == year%4 && (year%100 !=0 || year%400 == 0));			
+}   
+			
+function optionsClear(e){   			
+	e.options.length = 1;   			
+}
+
+
+
+
+
+axis = d3.select("body").append("table")//声明小时时间轴
+						.attr("class","hour-table")
+						.attr("cellspacing","0")
+                        .append("tr");
+
+	for (var i = 0;i < 24;i++){
+        axis.append("td").attr("width","49")
+                         .attr("value",i)
+						 .attr("id","hour")
+                         .attr("bgcolor","#303030").text(i)
+                         .style("color","#c3c8d1");
+		
+         }
+d3.selectAll("#hour").attr("align","center")
+                .on("mouseover",function(d,i){  
+                d3.select(this)  
+                  .attr("bgcolor","475A7D");  
+                 })
+               .on("mouseout",function(d,i){  
+                d3.select(this)  
+                  .attr("bgcolor","#303030");  
+           }) 	
+                 .on("click",function(d){  
+		
+					var select_hour = d3.select(this);
+					Hour = select_hour.attr('value');
+					alert( Hour );
+        		
+	});		   
+
+
+d3.select("body").append("table").attr("ID","min-axis");//声明分钟时间轴
+    
+	d3.select("#min-axis").append("tr").attr("ID","circle");//声明图形时间轴
+	
+	d3.select("#min-axis").append("tr").attr("ID","num");//声明下方数字
+	
+	function pushimg1(num){
+		d3.select("#circle").append("td")
+						.attr("class","ever-circle")
+						
+						//.attr("value",num)
+						.append("img")
+						.attr("ID","cir")
+						.attr("value",num)
+						.attr("src","img/circle.png");
+	
+	}
+	
+	function pushimg2(num){
+		d3.select("#circle").append("td")
+							//.attr("value",num)
+							.attr("class","ever-circle")
+						.append("img")
+						.attr("ID","cli")
+						.attr("value",num)
+						.attr("src","img/click2.png");
+	
+	}
+	
+	for(var i = 0;i<60; i ++){
+		if( i%5 ==0 )
+			pushimg2(i);
+		else
+			pushimg1(i);
+	}
+	
+	function pushnum1 ( num ){//输出白色字体
+		d3.select("#num").append("td")
+						.text( num )
+						.attr("ID",num)
+						.style("color","white");
+						
+	}
+	
+	function pushnum2 ( num ){//不显示字体
+		d3.select("#num").append("td")
+						.text( num )
+						.attr("ID",num)
+						.style("color","black")
+						//.attr("style","display:none");
+						
+	}
+	
+	for (var j = 0; j < 60 ; j++){//生成分钟时间轴
+		if(j%5 == 0 ){
+			
+			pushnum1( j );
+			
+			}
+		else{
+		
+			pushnum2( j );
+		
+		}
+			
+	}
+
+	function ret (num){
+	
+		return num;
+	
+	}
+	
+	
+		d3.selectAll("#cir")
+    .on("mouseover",function(d){  
+		var over = d3.select(this)
+		over.attr("src","img/circle2.png");  
+		
+    })
+	.on("mouseout",function(d){  
+		var out = d3.select(this)  
+		out.attr("src","img/circle.png");  
+	}) 
+	.on("click",function(d){  
+		//min = d3.select(this)  
+		var select_min = d3.select(this);
+        //select_min.onchange = function(){
+            Min = select_min.attr("value");
+			alert( Min );
+        	var Time = ( new Date(Year,Month,Day,Hour,Min)).getTime();
+            alert(Time);			
+	}); 
+    
+	
+	d3.selectAll("#cli")
+    .on("mouseover",function(d){  
+		var over = d3.select(this)
+		over.attr("src","img/click1.png");  
+		
+    })
+	.on("mouseout",function(d){  
+		var out = d3.select(this)  
+		out.attr("src","img/click2.png");  
+	}) 
+	.on("click",function(d){  
+		//min = d3.select(this)  
+		var select_min = d3.select(this);
+        //select_min.onchange = function(){
+            Min = select_min.attr("value");
+			alert( Min );
+        	var Time = ( new Date(Year,Month,Day,Hour,Min)).getTime();
+            alert(Time);			
+	}); 
+
+	
+var select_year = document.getElementById('year');  //获取年月日
+        select_year.onchange = function(){
+            Year= select_year.value;
+			alert( Year );
+        };
+var select_month = document.getElementById('month');
+        select_month.onchange = function(){
+            Month= select_month.value;
+			alert( Month );
+        };
+var select_day = document.getElementById('day');
+        select_day.onchange = function(){
+            Day= select_day.value;
+			alert( Day );
+        };
+
+	
+	   
+</script>
+		
+</div>
+	
+</body>
+
+
+</html>

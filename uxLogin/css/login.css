@@ -1,0 +1,78 @@
+body{
+	background: #000;
+    background-image: url(https://cloud.githubusercontent.com/assets/16496669/13733053/85a6fcb0-e9c8-11e5-884d-bb06662cd205.png);
+    background-size: cover;
+    background-repeat: no-repeat ;
+    min-width: 1220px;
+}
+.Logo_company{
+	/*width: 200px;*/
+    height: 140px;
+    background-image: url(https://cloud.githubusercontent.com/assets/16496669/13736637/2ff00b30-e9f1-11e5-9f47-9b3a7ac09f5e.png);
+    background-repeat: no-repeat;
+    margin: 30px 0px 0px 120px;
+}
+.login_box{
+	display: block;
+    margin: auto;
+    margin-top: 65px;
+    margin-bottom: 0px;
+    width: 480px;
+}
+.user_input{
+	background-color: rgba(0, 0, 0, 0.5);
+    background: url(https://cloud.githubusercontent.com/assets/16496669/13390453/5a6869d6-df09-11e5-86d0-ef93fdd4ee1c.png);
+    background-position: 20px 10px;
+    background-repeat: no-repeat;
+    width: 85%;
+    height: 53px;
+    border-radius: 10px;
+    padding-left: 70px;
+    color: white;
+    font-size: 24px;
+}
+.password_input{
+	background-color: rgba(0, 0, 0, 0.5);
+    background: url(https://cloud.githubusercontent.com/assets/16496669/13390450/53f019e6-df09-11e5-84fc-730807105d45.png);
+    background-position: 20px 10px;
+    background-repeat: no-repeat;
+    width: 85%;
+    height: 53px;
+    margin-top: 20px;
+    border-radius: 10px;
+    padding-left: 70px;
+    color: white;
+    font-size: 24px;
+}
+.keep_login_div{
+	background: rgba(0, 0, 0, .5);
+    width: 100%;
+    height: 60px;
+}
+.keep_login_input{
+	margin-top: 12px;
+    margin-left: 275px;
+}
+.keep_login_message{
+	color: white;
+    margin-left: 10px;
+    font-size: 15px;
+}
+.submit_button{
+	background: rgba(0, 0, 0, .5);
+    width: 85%;
+    height: 53px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+}
+.copyright{
+	margin: 0 auto;
+    margin-top: 130px;
+    color: white;
+    font-size: 18px;
+    letter-spacing: 3px;
+    margin-right: 130px;
+    float: right;
+}

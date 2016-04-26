@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+	<script src ="js/d3.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	
+<style>
+*{
+	margin: 0;
+	padding: 0;
+}
+body{
+	font-size: 14px;
+	font-family: "微软雅黑";
+	background: #000000;
+	color: white;
+	margin: 0;
+	padding: 0;
+}
+a{
+	text-decoration: none;
+}
+ul li{
+	list-style: none;
+}
+.div_box{
+	margin: 150px;
+}
+.AllMenu_box{
+	position: absolute;
+	left: 0;
+}
+.imgall{
+	background-position: 50% 25% !important;
+	width: 100%;
+	height: 34px;
+	display: inline-block;
+	margin-top: 15%;
+	margin-bottom: 10px;
+}
+.contens{
+	border: 1px solid white;
+	height: 370px;
+	width: 80%;
+    position: absolute;
+    min-width: 660px;
+}
+.explain_about{
+	border-bottom: 1px solid #ccc;
+	height: 240px;
+}
+.img_logo{
+	background: url(img/zh.png) no-repeat;
+	width: 230px;
+    height: 92px;
+    display: inline-block;
+    margin-left: 76px;
+	margin-top: 76px;
+    float: left;
+}
+.table{
+    float: left;
+    margin-top: 76px;
+    margin-left: 70px;
+    letter-spacing: 8px;
+    font-size: 20px;
+}
+.foot{
+    clear: both;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 4px;
+    margin-top: 50px;
+}
+.right_menu{
+    float: right;
+    width: 80px;
+    clear: both;
+    margin-top: 20px;
+    color: white;
+    text-align: center;
+    height: 80px;
+}
+.tab_menu li { 
+	cursor:pointer; 
+	list-style:none;
+	display: block;
+	width: 100px;
+	height: 100px;
+	border: 1px solid white;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+.tab_menu li.hover { 
+	background: #8a2828;
+}
+.tab_menu li.selected { 
+	color:#FFF; 
+	background:#6D84B4;
+}
+.hide{
+	display: none;
+}
+svg {
+    font: 10px sans-serif;
+    shape-rendering: crispEdges;
+    }
+rect {
+    fill: black;
+    border : 1px solid white;
+    }
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    }
+</style>
+</head>
+<body>
+<script src ="js/imgButton.js" charset="utf-8"></script>
+<script src ="js/input.js" charset="utf-8"></script>
+<script src ="js/mainDiv.js" charset="utf-8"></script>
+<script src ="js/about.js" charset="utf-8"></script>
+<script src ="js/cpu.js" charset="utf-8"></script>
+<script src ="js/data.js" charset="utf-8"></script>
+<script src ="js/cpuSelect.js" charset="utf-8"></script>
+<script src ="js/cpuDescribe.js" charset="utf-8"></script>
+<script src ="js/changeDiv.js" charset="utf-8"></script>
+<script src ="js/deleteDiv.js" charset="utf-8"></script>
+<script src ="js/autoDraw.js" charset="utf-8"></script>
+<script src ="js/getData.js" charset="utf-8"></script>
+<script src ="js/main.js" charset="utf-8"></script>
+</body>
+</html>

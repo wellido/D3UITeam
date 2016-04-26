@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>交易量详细页面</title>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<style type="text/css">
+			body{
+				font-size: 14px;
+				font-family: "微软雅黑";
+				background: #000000;
+				color: white;
+				margin: 0;
+				padding: 0;
+			}
+			a{
+				text-decoration: none;
+			}
+			.return_img{
+			    background: url(img/return.png) no-repeat;
+			    height: 20px;
+			    margin-left: 24px;
+			    display: inline-block;
+			    margin-top: 25px;
+			}
+			.return_txt{
+				margin-left: 25px;
+				color: white;
+			}
+			.lealth_title{
+				margin: 0 auto;
+				text-align: center;
+				margin-top: 45px;
+			}
+			.content_text{
+				margin-top: 6%;
+			}
+			.mobileBanking{
+				width: 200px;
+				background: #1d2635;
+				margin-left: 60px;
+    			margin-right: 60px;
+				float: left;
+				border-radius: 10px;
+				margin-bottom: 25px;
+			}
+			.mobileB-title{
+				text-align: center;
+				padding-top: 10px;
+			}
+			.timeImg{
+				background: url(img/time.png) no-repeat;
+			    height: 80px;
+			    width: 80px;
+			    display: inline-block;
+			    margin-left: 58px;
+			}
+			.ul,.table{
+				margin: 0 auto;
+				border-top: 1px solid white;
+				line-height: 25px;
+				list-style: none;
+				padding: 0px;
+				padding-top: 5px;
+				width: 70%;
+				margin-bottom: 20px;
+			}
+			.ul li{
+				width: 100%;
+			    letter-spacing: 3px;
+			}
+			.table tr td{
+				width: 60%;
+			}
+			.hp-health{
+				font-size: 16px;
+				font-weight: bold;
+			}
+			.hp-number{
+				font-size: 30px;
+				margin-left: 20px;
+			}
+			.y-color{
+				color: chocolate;
+			}
+			.indexMap{
+				background: url(img/home.png) no-repeat;
+				width: 106px;
+			    height: 92px;
+			    clear: both;
+			    float: right;
+}
+	</style>
+</head>
+<body>
+<script>
+
+function tradingData(){
+	d3.json('/zh-cn/dashboard/customjson/')
+		.header("Content-Type", "application/x-www-form-urlencoded")
+		.post("", function(e, data) {
+			var intf_dispname = []; //title
+	        var succ_rate = []; //成功率
+			var alert_count = []; //告警
+			var trans_count_arr = [];//
+			var trans_count_unit_arr = [];
+	
+		var monitor_data = data;
+        var monitor_len = monitor_data.length;
+        var top_div = "";
+
+        for(var index = 0; index < monitor_len; index++){
+            var value = monitor_data[index];
+//          var duration = Math.round(value.duration*100)/100;
+//          var duration_unit = '';
+//          if(duration > 999.99){
+//              duration = Math.round(duration/1000*100)/100 ;
+//              duration_unit = 's';
+//          }else{
+//              duration_unit = 'ms';
+//          }
+            
+            intf_dispname.push(value.intf_dispname);
+            if(value.succ_rate == 0){
+            	succ_rate.push(0);
+            }else{
+            	succ_rate.push((value.succ_rate).toFixed(2)+'%');
+            }
+            alert_count.push(value.alert_count);
+            
+            var trans_count = value.trans_count;
+            var trans_count_unit = '';
+            if(trans_count <= 9999){
+                trans_count_unit = '笔/分钟';
+            }else if( 10000 <= trans_count < 99999){
+                trans_count =  Math.round(trans_count/10000*100)/100;
+                trans_count_unit = + " 万笔";
+            }else if(100000 <= trans_count <999999){
+                trans_count = Math.round(trans_count/100000*100)/100;
+                trans_count_unit = '十万笔';
+            }
+            trans_count_arr.push(trans_count);
+            trans_count_unit_arr.push(trans_count_unit);
+        }
+        
+        
+        var divBox = d3.select("body")
+	    	.append("div");
+		divBox.append("a")
+		  	.attr("href","javascript:void(0);")
+		  	.attr("class","return_img")
+		  	.append("span")
+			.attr("class","return_txt")
+			.html("返回");
+		divBox.append("h3")
+			.attr("class","lealth_title")
+			.html("交易量");
+		var content_text = divBox.append("div")
+			.attr("class","content_text");
+		//for
+//		var title =    ["手机银行","EAL","手机银行","EAL","手机银行","EAL","手机银行","EAL"];
+//		var TradingVolume = ["2584","2585","2586","2587","2588","2589","2590","2591"];
+//		var datas_precent = ["75.4%","75.4%","75.4%","75.4%","75.4%","75.4%","75.4%","75.4%"];
+//		var datas_oh = [78,79,56,100,79,56,100,79];
+		var color = ["#ec9333","green","red"];
+			for(var i=0;i < intf_dispname.length; i++){
+				var mobileBanking = content_text.append("div")
+					.attr("class","mobileBanking");
+				mobileBanking.append("h3")
+					.html(intf_dispname[i])
+					.attr("class","mobileB-title");
+				var ulTradingVolume = mobileBanking.append("ul")
+					.attr("class","ul");
+				ulTradingVolume.append("li").html("交易量");
+				ulTradingVolume.append("li")
+					.style("font-size","24px")
+					.html(trans_count_arr[i])
+					.append("lable")
+			     	.style("margin-left","8px")
+			     	.style("font-size","12px")
+			     	.html(trans_count_unit_arr[i]);
+				var data_contn = mobileBanking.append("table")
+					.attr("class","table")
+					.style("border-top","none");
+				var table_tr1 = data_contn.append("tr");
+				var table_tr2 = data_contn.append("tr");
+				table_tr1.append("td")
+				   .html("成功率");
+				table_tr1.append("td")
+				    .html(succ_rate[i]);
+			    table_tr2.append("td")
+				    .html("告警数量");
+		  		table_tr2.append("td")
+				   .html(function(){
+			    		if(alert_count[i] < 60){
+			    			return '<lable style="color:' + color[2] + ';" >' + alert_count[i] + '</lable>';
+			    		}else if(alert_count[i] < 90){
+			    			return '<lable style="color:' + color[0] + ';" >' + alert_count[i] + '</lable>';
+			    		}else{
+			    			return '<lable style="color:' + color[1] + ';" >' + alert_count[i] + '</lable>';
+			    		}
+			    	});
+			}
+		divBox.append("a")
+			.attr("href","javascript:void(0);")
+			.attr("class","indexMap");
+		});
+}
+	
+window.onload = function () {
+	tradingData();
+};
+		</script>
+	</body>
+</html>

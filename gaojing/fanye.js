@@ -15,7 +15,16 @@ function backBlack(num) {
         d3.select('#fanye' + i).style('background-color', 'black');
     }
 }
-function fenye(num) {
+
+function paintAgain(tableInfo) {
+    d3.select('#tables').remove();
+    table();
+    var paintNum = parseInt(Math.random()*4);
+    for (var i = 0 ; i < 13 ; i++) {
+        addInfoToTable(tableInfo[paintNum]);
+    }
+}
+function fenye(num,tableInfo) {
     var num = num;
     var nowPage = 1;
     var flagPage = 1;
@@ -61,6 +70,7 @@ function fenye(num) {
                 'background-color': '#3469a4'
             });
         }
+        paintAgain(tableInfo);
     }).html('首页').style({
         'color': 'white',
         'line-height': '33px',
@@ -77,7 +87,7 @@ function fenye(num) {
                 'position': 'absolute',
                 'width': '33px',
                 'height': '33px',
-                'border': 'solid 1px blue',
+                'border': 'solid 1px #3469a4',
                 'border-radius': '5px',
                 'left': leftPlu + 'px',
                 'cursor': 'pointer'
@@ -88,6 +98,7 @@ function fenye(num) {
                 });
                 flagPage = parseInt(d3.select(this).html());
                 nowPage = flagPage;
+                paintAgain(tableInfo);
             }).html(i).style({
                 'color': 'white',
                 'line-height': '33px',
@@ -121,6 +132,7 @@ function fenye(num) {
                     'background-color': '#3469a4'
                 });
             }
+            paintAgain(tableInfo);
         }).html('下一页').style({
             'color': 'white',
             'line-height': '33px',
@@ -151,6 +163,7 @@ function fenye(num) {
             });
             flagPage = num;
             nowPage = num;
+            paintAgain(tableInfo);
         }).html('末页').style({
             'color': 'white',
             'line-height': '33px',
@@ -164,7 +177,7 @@ function fenye(num) {
                 'position': 'absolute',
                 'width': '33px',
                 'height': '33px',
-                'border': 'solid 1px blue',
+                'border': 'solid 1px #3469a4',
                 'border-radius': '5px',
                 'left': leftPlu + 'px',
                 'cursor': 'pointer'
@@ -175,7 +188,8 @@ function fenye(num) {
                 });
                 nowPage = parseInt(d3.select(this).attr('id').replace('fanye', ''));
                 flagPage = parseInt(d3.select(this).html());
-                console.log(flagPage);
+                console.log('flagPage:' + flagPage, 'nowPage' + nowPage);
+                paintAgain(tableInfo);
             }).html(i).style({
                 'color': 'white',
                 'line-height': '33px',
@@ -191,6 +205,16 @@ function fenye(num) {
             'height': '33px',
             'left': leftPlu + 'px',
             'cursor': 'pointer'
+        }).on('click', function () {
+            if (d3.select(this).html() != '...') {
+                backBlack(12);
+                d3.select(this).style({
+                    'background-color': '#3469a4'
+                });
+                flagPage = num - 1;
+                nowPage = 11;
+            }
+            paintAgain(tableInfo);
         }).html('...').style({
             'color': 'white',
             'line-height': '33px',
@@ -202,10 +226,23 @@ function fenye(num) {
             'position': 'absolute',
             'width': '33px',
             'height': '33px',
-            'border': 'solid 1px blue',
+            'border': 'solid 1px #3469a4',
             'border-radius': '5px',
             'left': leftPlu + 'px',
             'cursor': 'pointer'
+        }).on('click', function () {
+            fanye((num - 11), num);
+            d3.select('#fanye11').style({
+                'border': 'solid 1px grey',
+                'border-radius': '5px'
+            }).html(num - 1);
+            backBlack(12);
+            d3.select('#fanye12').style({
+                'background-color': '#3469a4'
+            });
+            flagPage = num;
+            nowPage = 12;
+            paintAgain(tableInfo);
         }).html(num).style({
             'color': 'white',
             'line-height': '33px',
@@ -241,14 +278,14 @@ function fenye(num) {
                     });
                     console.log('yes1');
                 } else {
-                    if (flagPage < (num - 3) && (nowPage == 9)) {
-                        fanye((flagPage - 7), num);
+                    if (flagPage < (num - 3) && (nowPage == 9 || nowPage == 10)) {
+                        fanye((flagPage - 8), num);
                         flagPage += 1;
                         console.log('yes2');
                     } else {
                         flagPage += 1;
                         d3.select('#fanye11').style({
-                            'border': 'solid 1px blue',
+                            'border': 'solid 1px #3469a4',
                             'border-radius': '5px'
                         }).html(num - 1);
                         backBlack(12);
@@ -258,6 +295,8 @@ function fenye(num) {
                         console.log('yes3');
                     }
                 }
+
+                paintAgain(tableInfo);
                 console.log('flagPage: ' + flagPage);
                 console.log('nowPage: ' + nowPage);
             }
@@ -288,7 +327,7 @@ function fenye(num) {
         }).on('click', function () {
             fanye((num - 11), num);
             d3.select('#fanye11').style({
-                'border': 'solid 1px blue',
+                'border': 'solid 1px grey',
                 'border-radius': '5px'
             }).html(num - 1);
             backBlack(12);
@@ -297,6 +336,7 @@ function fenye(num) {
             });
             flagPage = num;
             nowPage = 12;
+            paintAgain(tableInfo);
         }).html('末页').style({
             'color': 'white',
             'line-height': '33px',

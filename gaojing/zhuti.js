@@ -7,6 +7,14 @@ function zhuti() {
         'height': '67px',
         'border-bottom': 'solid 1px grey'
     });
+
+    zhutiDiv.append('img').attr({
+        src: 'img/告警.svg'
+    }).style({
+        'position': 'absolute',
+        'left': '20px',
+        'top': '8px'
+    });
     zhutiDiv.append('div').style({
         'width': '175px',
         'height': '67px',
@@ -16,6 +24,7 @@ function zhuti() {
         'line-height': '67px',
         'vertical-align': 'middle',
         'text-align': 'center',
+        'font-Weight': 'bold',
         'font-size': '25px'
     });
     var myDate = new Date();
@@ -34,6 +43,7 @@ function zhuti() {
     ).style({
         'color': 'white',
         'line-height': '67px',
+        'font-Weight': 'bold',
         'vertical-align': 'middle',
         'font-size': '22px'
     })

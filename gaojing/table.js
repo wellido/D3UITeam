@@ -30,7 +30,8 @@ function addInfoToTable(tableInfo) {
                 'width': widths[i]
             }).on('mouseover', function () {
                 d3.select(this).style({
-                    'border': 'yellow 1px solid'
+                    'border-right': 'yellow 1px solid',
+                    'border-left': 'yellow 1px solid'
                 }).on('mouseout', function () {
                     d3.select(this).style({
                         'border': 'none',

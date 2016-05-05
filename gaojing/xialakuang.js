@@ -15,9 +15,9 @@ function xialakuang() {
             .style({
                 'position': 'absolute',
                 'width': '9.7%',
-                'height': '35px',
+                'height': '40px',
                 'left': xialaPos[i - 1],
-                'top': '25px',
+                'top': '20px',
                 'appearance': 'none',
                 'background-color': 'black',
                 'background-repeat': 'no-repeat',
@@ -45,10 +45,10 @@ function xialakuang() {
     xialaDiv.append('input').attr('id', 'search').style({
         'position': 'absolute',
         'width': '16%',
-        'height': '35px',
+        'height': '40px',
         'color': 'white',
         'left': '82.5%',
-        'top': '25px',
+        'top': '20px',
         'border-radius': '5px',
         'background-color': 'black',
         'font-size': '16px',
@@ -60,8 +60,8 @@ function xialakuang() {
     xialaDiv.append('div').attr('id', 'searchDiv').style({
         'position': 'absolute',
         'left': '95.6%',
-        'top': '25px',
-        'height': '35px',
+        'top': '20px',
+        'height': '40px',
         'width': '38px',
         'background-color': '#3469a4',
         'border-radius': '5px'
@@ -72,6 +72,6 @@ function xialakuang() {
     }).style({
         'position': 'absolute',
         'left': '95.2%',
-        'top': '18px'
+        'top': '16px'
     });
 }

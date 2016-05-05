@@ -23,7 +23,7 @@ function addInfoToTable(tableInfo) {
         d3.select('#tables').append('td')
             .attr('class', 'tableFont')
             .style({
-                'BORDER-BOTTOM': 'grey 1px solid',
+                'BORDER-BOTTOM': '#404040 1px solid',
                 'height': '46px',
                 'vertical-align': 'middle',
                 'text-align': 'center',
@@ -35,7 +35,7 @@ function addInfoToTable(tableInfo) {
                 }).on('mouseout', function () {
                     d3.select(this).style({
                         'border': 'none',
-                        'BORDER-BOTTOM': 'grey 1px solid'
+                        'BORDER-BOTTOM': '#404040 1px solid'
                     })
                 })
             })

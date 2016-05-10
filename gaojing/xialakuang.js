@@ -6,11 +6,13 @@ function xialakuang() {
         'width': '100%',
         'height': '80px',
         'position': 'absolute',
-        'top': '67px'
+        'top': '67px',
+        "opacity": 1.0,
+        'z-index': '2'
     });
     var xialaInfo = [['系统预警'], ['所有分类'], ['所有层级'], ['所有指标'], ['所有状态']];
-    var xialaPos = ['26%', '38%', '48.4%', '58.8%', '69.2%'];
-    for (var i = 1; i <= 5; i++) {
+    var xialaPos = ['3.125%', '14.2%', '26%', '38%', '48.4%', '58.8%', '69.2%'];
+    for (var i = 3; i <= 7; i++) {
         xialaDiv.append('select').attr('id', 'xiala' + i)
             .style({
                 'position': 'absolute',
@@ -27,12 +29,13 @@ function xialakuang() {
                 'color': 'white',
                 'font-Weight': 'bold',
                 'padding-left': '26px',
-                'border-radius': '5px'
+                'border-radius': '3px'
             });
     }
+
     for (var i = 1; i <= 5; i++) {
         for (var j = 1; j <= (xialaInfo[i - 1].length); j++) {
-            d3.select('#xiala' + i).append('option')
+            d3.select('#xiala' + (i + 2)).append('option')
                 .attr('value', 'option' + i + '' + j)
                 .text(xialaInfo[i - 1][j - 1]).style({
                 'font-Weight': 'bold',

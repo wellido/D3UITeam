@@ -327,7 +327,7 @@ function fenye(num,tableInfo) {
         }).on('click', function () {
             fanye((num - 11), num);
             d3.select('#fanye11').style({
-                'border': 'solid 1px grey',
+                'border': 'solid 1px #3469a4',
                 'border-radius': '5px'
             }).html(num - 1);
             backBlack(12);

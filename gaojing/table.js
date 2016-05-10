@@ -12,7 +12,9 @@ function table() {
             'border': 'none',
             'border-bottom': 'solid 4px grey',
             'position': 'absolute',
-            'top': '200px'
+            'top': '200px',
+            "opacity": 1.0,
+            'z-index': '1'
         });
 }
 

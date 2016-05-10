@@ -35,8 +35,8 @@ function zhuti() {
         'top': '0px',
         'left': '210px',
     }).html(myDate.getFullYear() + '-'
-        + myDate.getMonth() + '-'
-        + myDate.getDay() + ' '
+        + (myDate.getMonth()+1) + '-'
+        + myDate.getDate() + ' '
         + myDate.getHours() + ':'
         + myDate.getMinutes() + ' '
         + '正常'

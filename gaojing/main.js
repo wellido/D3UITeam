@@ -7,7 +7,9 @@ window.onload = function () {
         .attr('id', 'warpDiv')
         .style({
             'width': '1440px',
-            'height': '960px'
+            'height': '960px',
+            "opacity": 1.0,
+            'z-index': '1'
         });
     var tableInfo = [['2016-05-03 10:55:19', '组件', '联机交易 手机银行 ', '阈值告警：成功率低于阈值', '99', '95.16', '2016-05-03 10:49:00', '6', '持续中'],
         ['2016-05-03 10:55:19', 'haha', '联机交易 手机银行 ', '阈值告警：成功率低于阈值', '99', '95.16', '2016-05-03 10:49:00', '6', '持续中'],
@@ -24,4 +26,6 @@ window.onload = function () {
     xialakuang();
     zhuti();
     fenye(num,tableInfo);
+    timeSelect(d3.select('#warpDiv'),'3.125%','87px');
+    hourSelect(d3.select('#warpDiv'),'14.2%','87px');
 }

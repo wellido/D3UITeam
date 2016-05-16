@@ -162,6 +162,36 @@ function timeSelect(container, left, top) {
             }).html(weeks[i - 1]);
     }
     daysAdd(nowYear, nowMonth);
+    d3.selectAll('.normal').on('click',function() {
+        d3.select('#shijian').style({
+            "opacity": 0.0,
+            'z-index': '0'
+        });
+        d3.select('#daystable').style({
+            "opacity": 0.0,
+            'z-index': '0'
+        });
+        d3.select('#hourMin').style({
+            "opacity": 0.0,
+            'z-index': '0'
+        });
+        clickFlag = 0;
+    });
+    d3.selectAll('.table').on('click',function() {
+        d3.select('#shijian').style({
+            "opacity": 0.0,
+            'z-index': '0'
+        });
+        d3.select('#daystable').style({
+            "opacity": 0.0,
+            'z-index': '0'
+        });
+        d3.select('#hourMin').style({
+            "opacity": 0.0,
+            'z-index': '0'
+        });
+        clickFlag = 0;
+    });
 }
 
 function daysAdd(nowYear, nowMonth) {

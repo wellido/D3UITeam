@@ -29,21 +29,18 @@ function hourSelect(container, left, top) {
             'vertical-align': 'middle'
         });
     d3.select('#xiala2').on('click', function () {
-        if (!clickFlag) {
+        if (d3.select('#hourMin').style('opacity') == 0.0) {
             d3.select('#hourMin').style({
                 "opacity": 1.0,
                 'z-index': '3'
             });
-            clickFlag = 1;
         } else {
             d3.select('#hourMin').style({
                 "opacity": 0.0,
                 'z-index': '0'
             });
-            clickFlag = 0;
         }
     });
-
     var hourMin = d3.select('#warpDiv').append('div').attr('id', 'hourMin').style({
         'height': '30px',
         'width': '9.7%',

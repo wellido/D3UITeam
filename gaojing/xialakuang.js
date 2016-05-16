@@ -2,14 +2,16 @@
  * Created by Thinkpad3 on 2016/5/4.
  */
 function xialakuang() {
-    var xialaDiv = d3.select('#warpDiv').append('div').attr('id', 'xialaiDiv').style({
-        'width': '100%',
-        'height': '80px',
-        'position': 'absolute',
-        'top': '67px',
-        "opacity": 1.0,
-        'z-index': '2'
-    });
+    var xialaDiv = d3.select('#warpDiv').append('div')
+        .attr('class', 'normal')
+        .attr('id', 'xialaiDiv').style({
+            'width': '100%',
+            'height': '80px',
+            'position': 'absolute',
+            'top': '67px',
+            "opacity": 1.0,
+            'z-index': '2'
+        });
     var xialaInfo = [['系统预警'], ['所有分类'], ['所有层级'], ['所有指标'], ['所有状态']];
     var xialaPos = ['3.125%', '14.2%', '26%', '38%', '48.4%', '58.8%', '69.2%'];
     for (var i = 3; i <= 7; i++) {

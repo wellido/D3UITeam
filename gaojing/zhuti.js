@@ -2,11 +2,12 @@
  * Created by Thinkpad3 on 2016/5/4.
  */
 function zhuti() {
-    var zhutiDiv = d3.select('#warpDiv').append('div').attr('id', 'zhutiDiv').style({
-        'width': '100%',
-        'height': '67px',
-        'border-bottom': 'solid 1px grey'
-    });
+    var zhutiDiv = d3.select('#warpDiv').append('div').attr('id', 'zhutiDiv')
+        .attr('class', 'normal').style({
+            'width': '100%',
+            'height': '67px',
+            'border-bottom': 'solid 1px grey'
+        });
 
     zhutiDiv.append('img').attr({
         src: 'img/告警.svg'
@@ -35,7 +36,7 @@ function zhuti() {
         'top': '0px',
         'left': '210px',
     }).html(myDate.getFullYear() + '-'
-        + (myDate.getMonth()+1) + '-'
+        + (myDate.getMonth() + 1) + '-'
         + myDate.getDate() + ' '
         + myDate.getHours() + ':'
         + myDate.getMinutes() + ' '

@@ -22,7 +22,6 @@ function hourSelect(container, left, top) {
     var myDate = new Date();
     var nowHour = myDate.getHours();
     var nowMinute = myDate.getMinutes();
-    var clickFlag = 0;
     d3.select('#xiala2').attr('value', (nowHour + ' : ' + nowMinute))
         .style({
             'line-height': '40px',
@@ -33,6 +32,14 @@ function hourSelect(container, left, top) {
             d3.select('#hourMin').style({
                 "opacity": 1.0,
                 'z-index': '3'
+            });
+            d3.select('#shijian').style({
+                "opacity": 0.0,
+                'z-index': '0'
+            });
+            d3.select('#daystable').style({
+                "opacity": 0.0,
+                'z-index': '0'
             });
         } else {
             d3.select('#hourMin').style({

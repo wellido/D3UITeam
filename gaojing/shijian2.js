@@ -34,14 +34,13 @@ function timeSelect(container, left, top) {
     var nowYear = myDate.getFullYear();
     var nowMonth = myDate.getMonth() + 1;
     var nowDay = myDate.getDate();
-    var clickFlag = 0;
     d3.select('#xiala1').attr('value', (nowYear + '/' + nowMonth + '/' + nowDay))
         .style({
             'line-height': '40px',
             'vertical-align': 'middle'
         });
     d3.select('#xiala1').on('click', function () {
-        if (!clickFlag) {
+        if (d3.select('#shijian').style('opacity') == 0.0) {
             d3.select('#shijian').style({
                 "opacity": 1.0,
                 'z-index': '3'
@@ -49,6 +48,10 @@ function timeSelect(container, left, top) {
             d3.select('#daystable').style({
                 "opacity": 1.0,
                 'z-index': '3'
+            });
+            d3.select('#hourMin').style({
+                "opacity": 0.0,
+                'z-index': '0'
             });
             clickFlag = 1;
         } else {
@@ -60,7 +63,6 @@ function timeSelect(container, left, top) {
                 "opacity": 0.0,
                 'z-index': '0'
             });
-            clickFlag = 0;
         }
     });
     var yearSelect = shijian.append('select').attr('id', 'yearSelect')
@@ -83,6 +85,7 @@ function timeSelect(container, left, top) {
             d3.select('#daystable').remove();
             var value = d3.select(this).property("value");
             nowYear = parseInt(value.replace('year', ''));
+            alert(nowYear);
             daysAdd(nowYear, nowMonth);
             d3.select('#daystable').style({
                 "opacity": 1.0,
@@ -162,7 +165,7 @@ function timeSelect(container, left, top) {
             }).html(weeks[i - 1]);
     }
     daysAdd(nowYear, nowMonth);
-    d3.selectAll('.normal').on('click',function() {
+    d3.selectAll('.normal').on('click', function () {
         d3.select('#shijian').style({
             "opacity": 0.0,
             'z-index': '0'
@@ -175,9 +178,8 @@ function timeSelect(container, left, top) {
             "opacity": 0.0,
             'z-index': '0'
         });
-        clickFlag = 0;
     });
-    d3.selectAll('.table').on('click',function() {
+    d3.selectAll('.table').on('click', function () {
         d3.select('#shijian').style({
             "opacity": 0.0,
             'z-index': '0'
@@ -190,7 +192,6 @@ function timeSelect(container, left, top) {
             "opacity": 0.0,
             'z-index': '0'
         });
-        clickFlag = 0;
     });
 }
 
@@ -208,8 +209,7 @@ function daysAdd(nowYear, nowMonth) {
         "opacity": 0.0,
         'z-index': '0'
     });
-    var rightDay = nowYear + '-' + nowMonth + '-' + 1;
-    var nowWeek = new Date(rightDay).getDay();
+    var nowWeek = new Date(nowYear, nowMonth - 1, 1).getDay();
     var daysArror = [[], [], [], [], [], []];
     dayArrorInf(nowYear, daysArror, nowWeek, nowMonth);
 }

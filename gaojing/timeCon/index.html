@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+<script src="shijian4.js" charset="utf-8"></script>
+<script>
+    d3.select('body').style('background-color', 'black');
+    var warpDiv = d3.select('body').append('div')
+            .attr('id', 'warpDiv')
+            .style({
+                'width': '1440px',
+                'height': '960px',
+                "opacity": 1.0,
+                'z-index': '1'
+            });
+    shijian4(warpDiv,'100px','100px');
+</script>
+</body>
+</html>

@@ -98,11 +98,51 @@ function shijian4(container, left, top) {
     }).on('mouseover', function () {
         d3.select(this).style({
             'border': '1px solid green'
-        })
+        });
     }).on('mouseout', function () {
         d3.select(this).style({
             'border': ''
         })
+    }).on('mousewheel', function (e) {
+        d3.select('#warpDiv').style({
+            'overflow' : 'hidden'
+        });
+        if(parseInt(d3.select('#scroller1').style('top').replace('px','')) >= 0
+            && parseInt(d3.select('#scroller1').style('top').replace('px','')) <= 225) {
+            e = e || window.event;
+            var temTop = parseInt(d3.select('#scroller1').style('top').replace('px', ''));
+            if (e.wheelDelta > 0) {
+                if (temTop > 5) {
+                    d3.select('#scroller1').style('top', (temTop - 5) + 'px');
+                } else {
+                    d3.select('#scroller1').style('top', '1px');
+                }
+                var beginNum = parseInt(temTop / 14.625);
+                for (var i = 0; i < 9; i++) {
+                    if ((i + beginNum) <= 9) {
+                        d3.select('#hour' + i).html(0 + '' + (i + beginNum));
+                    } else {
+                        d3.select('#hour' + i).html(i + beginNum);
+                    }
+                }
+                console.log('up');
+            } else {
+                if (temTop < 220) {
+                    d3.select('#scroller1').style('top', (temTop + 5) + 'px');
+                } else {
+                    d3.select('#scroller1').style('top', '225px');
+                }
+                var beginNum = parseInt(temTop / 14.625);
+                for (var i = 0; i < 9; i++) {
+                    if ((i + beginNum) <= 9) {
+                        d3.select('#hour' + i).html(0 + '' + (i + beginNum));
+                    } else {
+                        d3.select('#hour' + i).html(i + beginNum);
+                    }
+                }
+                console.log('down');
+            }
+        }
     });
     var shijian5 = hourMin.append('div').attr('id', 'shijian5').style({
         'position': 'absolute',
@@ -123,6 +163,43 @@ function shijian4(container, left, top) {
         d3.select(this).style({
             'border': ''
         })
+    }).on('mousewheel', function (e) {
+        if(parseInt(d3.select('#scroller2').style('top').replace('px','')) >= 0
+        && parseInt(d3.select('#scroller2').style('top').replace('px','')) <= 225) {
+            e = e || window.event;
+            var temTop = parseInt(d3.select('#scroller2').style('top').replace('px', ''));
+            if (e.wheelDelta > 0) {
+                if (temTop > 5) {
+                    d3.select('#scroller2').style('top', (temTop - 5) + 'px');
+                } else {
+                    d3.select('#scroller2').style('top', '1px');
+                }
+                var beginNum = parseInt(temTop / 4.319);
+                for (var i = 0; i < 9; i++) {
+                    if ((i + beginNum) <= 9) {
+                        d3.select('#minute' + i).html(0 + '' + (i + beginNum));
+                    } else {
+                        d3.select('#minute' + i).html(i + beginNum);
+                    }
+                }
+                console.log('up');
+            } else {
+                if (temTop < 220) {
+                    d3.select('#scroller2').style('top', (temTop + 5) + 'px');
+                } else {
+                    d3.select('#scroller2').style('top', '225px');
+                }
+                var beginNum = parseInt(temTop / 4.319);
+                for (var i = 0; i < 9; i++) {
+                    if ((i + beginNum) <= 9) {
+                        d3.select('#minute' + i).html(0 + '' + (i + beginNum));
+                    } else {
+                        d3.select('#minute' + i).html(i + beginNum);
+                    }
+                }
+                console.log('down');
+            }
+        }
     });
     var scroller1 = shijian4.append('div').attr('id', 'scroller1').style({
         'position': 'absolute',
